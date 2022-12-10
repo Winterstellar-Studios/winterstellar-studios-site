@@ -1,22 +1,45 @@
----
-layout: default
-title: Neat Starter
-path: home
----
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/img/favicon-16x16.png">
+    <title>
+      Winterstellar Studios - Site coming soon
+    </title>
+  </head>
 
-<div class="container mx-auto lg:h-screen flex flex-col justify-center items-center">
-  <h1>
-    Welcome to
-    <strong class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-      {{title}}
-    </strong>
-  </h1>
+<img src="/static/img/winterstellar-logo.png" alt="Logo for Winterstellar Studios">
+<h1>The Winterstellars Studios site is coming soon</h1>
 
-  <p>
-    <abbr title="netlify cms, eleventy, alpine js & tailwind css">NEAT</abbr>
-    Starter Template. Get Started by editing.
-    <code class="bg-gray-100 text-blue-800 p-1">/index.njk</code>
-  </p>
+<style>
+  * {
+    box-sizing: border-box;
+  }
 
-  {% include "./_includes/partials/content.html" %}
-</div>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  h1 {
+    font-family: sans-serif;
+  }
+
+  img {
+    width: intrinsic;
+    height: auto;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+</style>
+</html>
