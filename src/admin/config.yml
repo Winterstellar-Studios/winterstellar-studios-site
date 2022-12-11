@@ -1,10 +1,8 @@
 backend:
-  # Use netlify identity as backend
-  name: git-gateway
+  name: github
   branch: main
-  ### enable below lines for github integration ###
-  # name: github
-  # repo: surjithctly/neat-starter
+  repo: Winterstellar-Studios/winterstellar-studios-site
+  auth_endpoint: /api/auth
 media_folder: "src/static/img"
 public_folder: "/static/img"
 
@@ -12,187 +10,206 @@ public_folder: "/static/img"
 local_backend: true
 # publish_mode: editorial_workflow
 collections:
-  - label: "Work"
-    name: "work"
-    folder: "src/work"
+  - label: "Blog"
+    name: "blog"
+    folder: "src/posts"
     create: true
     editor:
-      preview: true
-    fields:
-      - widget: "string"
-        label: "Title"
-        name: "title"
-      - widget: "text"
-        label: "Description"
-        name: "description"
-        hint: "Displayed on page and in search engine results."
-      - widget: "list"
-        label: "Blocks"
-        name: "block"
-        types:
-        - widget: "list"
-          label: "Image grid"
-          name: "image-grid"
-          fields:
-            - label: "Image"
-              name: "image"
-              widget: "image"
-              choose_url: true
-            - label: 'URL'
-              name: 'url'
-              widget: 'list'
-              hint: "If the link you desire is a page on this site, choose one of the available collections and then one of the pages from the collection."
-              types:
-                - label: 'Work'
-                  name: 'work'
-                  widget: relation
-                  collection: "work"
-                  search_fields: ["title"]
-                  value_field: "slug"
-                - label: 'People'
-                  name: 'people'
-                  widget: relation
-                  collection: "people"
-                  search_fields: ["title"]
-                - label: "Pages"
-                  name: "pages"
-                  widget: "relation"
-                  search_fields: "title"
-                  value_field: slug
-                - label: "External"
-                  name: "external"
-                  widget: "string"
-                  default: "https://www.example.com"
-                  pattern: 
-                    - '^(https?:\/\/|\/)\w+\.[^\s]+$|^\/[^\s]*$'
-                    - "Text must be a valid URL."
-        - widget: "object"
-          label: "Image"
-          name: "image"
-          fields:
-            - label: "Image"
-              name: "image"
-              widget: image
-            - label: "Width"
-              name: "width"
-              widget: "object"
-              fields:
-                - label: "Display at original width?"
-                  name: "original_width"
-                  widget: "boolean"
-                  required: true
-                - label: "Width"
-                  info: "Number is in the percentage of the container that the image's width will occupy"
-                  name: "width"
-                  widget: "number"
-                  value_type: "int"
-                  min: 1
-                  max: 100
-                  step: 1
-                  default: 50
-  - label: "People"
-    name: "people"
-    editor:
-      preview: true
-    fields:
-      - label: "Name"
-        name: "name"
-        widget: "string"
-      - label: "Image"
-        name: "image"
-        widget: "image"
-      - lable: "Biography"
-        name: "bio"
-        widget: "markdown"
-      - label: "Headline"
-        name: "headline"
-        widget: "string"
-        hint: "Quirky one-liner that displays at the top of the page"
-      - label: "Accordions"
-        name: "accordions"
-        widget: "object"
-        fields:
-          - label: "Title"
-            name: "title"
-            widget: "string"
-            default: "Studio credits"
-            hint: "Title of the accordions section that displays above the accordions"
-          - label: "Accordions"
-            name: "accordions"
-            widget: "list"
-            fields:
-              - label: "Preview text"
-                name: "summary"
-                widget: "string"
-              - label: "Text content"
-                name: "text"
-  - label: "Pages"
-    name: "pages"
-    editor:
-      preview: true
-    fields:
-      - label: "Title"
-        name: "title"
-        widget: "string"
-      - label: "Description"
-        name: "description" 
-        widget: "markdown"
-        hint: "Displays at the top of the page"
-      - label: "Collection image grid"
-        name: "collection"
-        widget: "select"
-        options:
-          - label: "People"
-            value: "people"
-          - label: "Work"
-            value: "work"
-          - label: "Pages"
-            value: "pages"
-        hint: "Choose the collection whose entries you want to display as an image grid."
-  - label: "Settings"
-    name: "settings"
-    editor:
       preview: false
-    files:
-      - label: "Navigation"
-        name: "items"
-        file: "src/_data/navigation.yaml"
-        fields:
-          - label: Nav Items
-            name: items
-            widget: list
-            allow_add: false
-            collapsed: false
-            fields:
-              - { label: Title, name: text, widget: string }
-              - { label: URL, name: url, widget: string }
-      - label: "Quick Links"
-        name: "links"
-        file: "src/_data/quicklinks.yaml"
-        fields:
-          - label: Nav Items
-            name: links
-            widget: list
-            collapsed: false
-            fields:
-              - { label: Title, name: title, widget: string }
-              - { label: URL, name: url, widget: string }
-              - { label: Description, name: desc, widget: string }
-      - label: "Global"
-        name: "settings"
-        file: "src/_data/settings.yaml"
-        fields:
-          - { 
-              label: Site title, 
-              name: site_title, 
-              widget: string 
-            }
-          - { 
-              label: "Site logo",
-              name: "logo",
-              widget: "image",
-              default: "/static/img/winterstellar-logo.png",
-          }
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Author", name: "author", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
+      - widget: select
+        label: "tags"
+        name: "tags"
+        multiple: true
+        create: true
+        options: ["Tags", "created", "from", "config.yml"]
+
+#   - label: "Work"
+#     name: "work"
+#     folder: "src/work"
+#     create: true
+#     editor:
+#       preview: true
+#     fields:
+#       - widget: "string"
+#         label: "Title"
+#         name: "title"
+#       - widget: "text"
+#         label: "Description"
+#         name: "description"
+#         hint: "Displayed on page and in search engine results."
+#       - widget: "list"
+#         label: "Blocks"
+#         name: "block"
+#         types:
+#         - widget: "list"
+#           label: "Image grid"
+#           name: "image-grid"
+#           fields:
+#             - label: "Image"
+#               name: "image"
+#               widget: "image"
+#               choose_url: true
+#             - label: 'URL'
+#               name: 'url'
+#               widget: 'list'
+#               hint: "If the link you desire is a page on this site, choose one of the available collections and then one of the pages from the collection."
+#               types:
+#                 - label: 'Work'
+#                   name: 'work'
+#                   widget: relation
+#                   collection: "work"
+#                   search_fields: ["title"]
+#                   value_field: "slug"
+#                 - label: 'People'
+#                   name: 'people'
+#                   widget: relation
+#                   collection: "people"
+#                   search_fields: ["title"]
+#                 - label: "Pages"
+#                   name: "pages"
+#                   widget: "relation"
+#                   search_fields: "title"
+#                   value_field: slug
+#                 - label: "External"
+#                   name: "external"
+#                   widget: "string"
+#                   default: "https://www.example.com"
+#                   pattern: 
+#                     - '^(https?:\/\/|\/)\w+\.[^\s]+$|^\/[^\s]*$'
+#                     - "Text must be a valid URL."
+#         - widget: "object"
+#           label: "Image"
+#           name: "image"
+#           fields:
+#             - label: "Image"
+#               name: "image"
+#               widget: image
+#             - label: "Width"
+#               name: "width"
+#               widget: "object"
+#               fields:
+#                 - label: "Display at original width?"
+#                   name: "original_width"
+#                   widget: "boolean"
+#                   required: true
+#                 - label: "Width"
+#                   info: "Number is in the percentage of the container that the image's width will occupy"
+#                   name: "width"
+#                   widget: "number"
+#                   value_type: "int"
+#                   min: 1
+#                   max: 100
+#                   step: 1
+#                   default: 50
+#   - label: "People"
+#     name: "people"
+#     editor:
+#       preview: true
+#     fields:
+#       - label: "Name"
+#         name: "name"
+#         widget: "string"
+#       - label: "Image"
+#         name: "image"
+#         widget: "image"
+#       - lable: "Biography"
+#         name: "bio"
+#         widget: "markdown"
+#       - label: "Headline"
+#         name: "headline"
+#         widget: "string"
+#         hint: "Quirky one-liner that displays at the top of the page"
+#       - label: "Accordions"
+#         name: "accordions"
+#         widget: "object"
+#         fields:
+#           - label: "Title"
+#             name: "title"
+#             widget: "string"
+#             default: "Studio credits"
+#             hint: "Title of the accordions section that displays above the accordions"
+#           - label: "Accordions"
+#             name: "accordions"
+#             widget: "list"
+#             fields:
+#               - label: "Preview text"
+#                 name: "summary"
+#                 widget: "string"
+#               - label: "Text content"
+#                 name: "text"
+#   - label: "Pages"
+#     name: "pages"
+#     editor:
+#       preview: true
+#     fields:
+#       - label: "Title"
+#         name: "title"
+#         widget: "string"
+#       - label: "Description"
+#         name: "description" 
+#         widget: "markdown"
+#         hint: "Displays at the top of the page"
+#       - label: "Collection image grid"
+#         name: "collection"
+#         widget: "select"
+#         options:
+#           - label: "People"
+#             value: "people"
+#           - label: "Work"
+#             value: "work"
+#           - label: "Pages"
+#             value: "pages"
+#         hint: "Choose the collection whose entries you want to display as an image grid."
+#   - label: "Settings"
+#     name: "settings"
+#     editor:
+#       preview: false
+#     files:
+#       - label: "Navigation"
+#         name: "items"
+#         file: "src/_data/navigation.yaml"
+#         fields:
+#           - label: Nav Items
+#             name: items
+#             widget: list
+#             allow_add: false
+#             collapsed: false
+#             fields:
+#               - { label: Title, name: text, widget: string }
+#               - { label: URL, name: url, widget: string }
+#       - label: "Quick Links"
+#         name: "links"
+#         file: "src/_data/quicklinks.yaml"
+#         fields:
+#           - label: Nav Items
+#             name: links
+#             widget: list
+#             collapsed: false
+#             fields:
+#               - { label: Title, name: title, widget: string }
+#               - { label: URL, name: url, widget: string }
+#               - { label: Description, name: desc, widget: string }
+#       - label: "Global"
+#         name: "settings"
+#         file: "src/_data/settings.yaml"
+#         fields:
+#           - { 
+#               label: Site title, 
+#               name: site_title, 
+#               widget: string 
+#             }
+#           - { 
+#               label: "Site logo",
+#               name: "logo",
+#               widget: "image",
+#               default: "/static/img/winterstellar-logo.png",
+#           }
 
 # media_library:
 #   name: uploadcare
