@@ -1,0 +1,40 @@
+{%- if media != blank -%}
+    <a 
+        href="
+            {%- if lightbox -%}
+                {{ media }}
+            {%- else -%}
+                {{ link }}
+            {%- endif -%}
+        "
+
+        aria-label="
+            {%- if lightbox -%}
+                Select this image to enlarge
+            {%- else -%}
+                {{ link_title }}
+            {%- endif -%}
+        " 
+
+        {%- assign extension = media | split: "/" | last | split: "." | last | downcase -%}
+
+        class="
+            grid-item
+
+            {% if 'webm,mpg,mp2,mpeg,mpe,mpv,ogg,mp4,m4p,m4v,avi,wmv,mov,qt,avchd' contains extension %}
+                video
+            {% endif %}
+        " 
+        data-lightbox="{{ lightbox }}"
+    >
+        {%- if title != blank -%}
+            <span>{{ title }}</span>
+        {%- endif -%}
+        {%- 
+            include "./partials/media/media", 
+                media: media, 
+                gifify: true, 
+                poster: poster 
+        -%}
+    </a>
+{%- endif -%}

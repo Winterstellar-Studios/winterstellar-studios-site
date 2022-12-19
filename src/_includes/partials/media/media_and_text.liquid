@@ -1,0 +1,13 @@
+{%- if media != blank or text != blank -%}
+    <section class="media-and-text">
+        {%- if media != blank -%}
+            {%- include "media", media: media, alt: alt_text -%}
+        {%- endif -%}
+
+        {%- if text != blank -%}
+            <div style="text-align: {{ text_align }};">
+                {{ text }}
+            </div>
+        {%- endif -%}
+    </section>
+{%- endif -%}
