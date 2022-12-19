@@ -1,0 +1,35 @@
+{%- liquid
+# Allows internal links to collections
+# as well as external links
+# This shortcode can also link images as well
+
+if class == blank
+    assign class = ""
+endif
+
+for url in url_list
+    if url.type == "external"
+        assign link = url.url
+    else
+        for collection_item in collections[url.type]
+            if collection_item.data.id == url.page
+                assign link = collection_item.url
+            endif
+        endfor
+    endif
+endfor -%}
+
+
+{%- if html -%}
+    <a href="{{ link }}" class="{%- if image != blank -%}has-image{%- endif -%} {% if current_page == link %}current{% endif %}">
+        <span class="{%- if title_hidden -%}visually-hidden{%- endif -%}">{{ link_title }}</span>
+        
+        {%- if image != blank -%}
+            <img src="{{ image }}" alt="">
+        {%- endif -%}
+    </a>
+{%- else -%}
+    {{ link }}
+{%- endif -%}
+
+{%- assign link = blank -%}
