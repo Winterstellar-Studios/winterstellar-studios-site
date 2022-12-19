@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.2",
+    "clean-css": "^5.3.1",
+    "lightgallery": "^2.7.0",
     "postcss": "^8.4.5"
   }
 }
