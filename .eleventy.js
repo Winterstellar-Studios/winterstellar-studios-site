@@ -63,6 +63,34 @@ module.exports = function (eleventyConfig) {
   // Copy favicon to route of /_site
   eleventyConfig.addPassthroughCopy("./src/favicon.ico");
 
+
+  eleventyConfig.addShortcode("vimeo", function (url, title) {
+    const regExp = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+    const parseUrl = regExp.exec(url);
+
+    return `<iframe
+              class="vimeo"
+              src="https://player.vimeo.com/video/${parseUrl[5]}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              title="${title}"
+            ></iframe>`
+  });
+
+  eleventyConfig.addShortcode("youtube", (url, title) => {
+    const regExp = /(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/;
+    const parseUrl = regExp.exec(url);
+
+    return `<iframe 
+              class="youtube" 
+              src="https://www.youtube-nocookie.com/embed/${parseUrl[1]}" 
+              title="${title}" 
+              frameborder="0" 
+              allowfullscreen
+            ></iframe>`;
+  });
+
   // Minify HTML
   eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
     // Eleventy 1.0+: use this.inputPath and this.outputPath instead
