@@ -1,0 +1,34 @@
+<header>
+    {%- if settings.logo or settings.site_title -%}
+        <a href="/" id="headerLogo">
+            {%- if settings.logo != blank -%}
+                {%- 
+                    include "./partials/media/media", 
+                        media: settings.logo, 
+                        alt: "Visit the Winterstellar Studios home page"
+                -%}
+            {%- else -%}
+                {{ settings.site_title }}
+            {%- endif -%}
+        </a>
+    {%- endif -%}
+
+
+    <nav>
+        {% if navigation.items %}
+            <ul>
+                {% for item in navigation.items %}
+                    <li>
+                        {%- 
+                            include "./partials/url", 
+                                url_list:     item.url, 
+                                link_title:   item.text, 
+                                html:         true,
+                                current_page: page.url 
+                        -%}
+                    </li>
+                {%- endfor -%}
+            </ul>
+        {% endif %}
+    </nav>
+</header>
