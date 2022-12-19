@@ -53,13 +53,15 @@ module.exports = function (eleventyConfig) {
   // Copy Static Files to /_Site
   eleventyConfig.addPassthroughCopy({
     "./src/admin/config.yml": "./admin/config.yml",
-    "./node_modules/alpinejs/dist/cdn.min.js": "./static/js/alpine.js",
-    "./node_modules/prismjs/themes/prism-tomorrow.css":
-      "./static/css/prism-tomorrow.css",
+    "node_modules/lightgallery/css/lightgallery.css":          "./static/css/lightgallery.css",
+    "node_modules/lightgallery/lightgallery.umd.js":           "./static/js/lightgallery/lightgallery.umd.js",
+    "node_modules/lightgallery/plugins/video/lg-video.umd.js": "./static/js/lightgallery/lg-video.umd.js",
+    "node_modules/lightgallery/fonts/lg.woff2":                "./static/fonts/lg.woff2",
+    "node_modules/minimasonry/build/minimasonry.esm.js":       "./static/js/minimasonry.esm.js"
   });
 
   // Copy Image Folder to /_site
-  eleventyConfig.addPassthroughCopy("./src/static/img");
+  eleventyConfig.addPassthroughCopy("./src/static");
 
   // Copy favicon to route of /_site
   eleventyConfig.addPassthroughCopy("./src/favicon.ico");
