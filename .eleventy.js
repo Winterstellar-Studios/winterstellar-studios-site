@@ -1,6 +1,7 @@
 const yaml = require("js-yaml");
 const { DateTime } = require("luxon");
 const htmlmin = require("html-minifier");
+const { EleventyRenderPlugin } = require("@11ty/eleventy");
 const CleanCSS = require("clean-css");
 const fs = require("fs");
 const NOT_FOUND_PATH = "_site/404.html";
