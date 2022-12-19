@@ -1,7 +1,9 @@
 ---
 id: 68693939-683e-4cac-8e05-a36e9b9ede64
+tags: people
 name: Wyatt Hall
-image: ""
+layout: person
+cover_media: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1670991028/Crew/Wyatt_Hall_vwvrsa.jpg
 bio: >-
   ##### Wyatt Hall - Founder and creative director
 

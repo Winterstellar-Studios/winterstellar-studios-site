@@ -1,8 +1,13 @@
----
 items:
   - text: Work
-    url: "#"
+    url:
+      - type: pages
+        page: c28aaa33-e2f1-4011-a249-c07a52518250
   - text: About
-    url: "#"
+    url:
+      - type: pages
+        page: ec92814d-3794-40b2-8728-1320889d65a4
   - text: Contact
-    url: "#"
+    url:
+      - type: pages
+        page: e03cbd5c-e87b-4260-8969-9e301f3da5da
