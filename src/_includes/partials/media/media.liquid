@@ -1,0 +1,21 @@
+{%- if media != blank -%}
+    {%- assign extension = media | split: "/" | last | split: "." | last | downcase -%}
+
+    {%- if "webm,mpg,mp2,mpeg,mpe,mpv,ogg,mp4,m4p,m4v,avi,wmv,mov,qt,avchd" contains extension -%}
+        <video 
+            src="{{ media }}"
+            poster="{{ poster }}"
+            {%- if gifify -%}
+                autoplay
+                disablepictureinpicture
+                disableremoteplayback
+                loop
+                muted
+            {%- else -%}
+                controls
+            {%- endif -%}
+        ></video>
+    {%- else -%}
+        <img src="{{ media }}" alt="{{ alt }}" class="{{ class }}">
+    {%- endif -%}
+{%- endif -%}

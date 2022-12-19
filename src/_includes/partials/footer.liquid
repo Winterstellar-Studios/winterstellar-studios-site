@@ -1,0 +1,24 @@
+<footer>
+    {%- if footer.social_links != blank %}
+        <nav>
+            <ul>
+                {%- for item in footer.social_links -%}
+                    <li>
+                        {%- 
+                            include "./partials/url", 
+                                url_list:     item.url, 
+                                link_title:   item.link_text, 
+                                title_hidden: true
+                                image:        item.icon, 
+                                html:         true 
+                        -%}
+                    </li>
+                {%- endfor -%}
+            </ul>
+        </nav>
+    {%- endif -%}
+
+    <small>
+        Copyright © {{ settings.site_title }} {{ global.year }}.
+    </small>
+</footer>

@@ -1,0 +1,15 @@
+{%- include "./partials/head" -%}
+
+{%- if headline != blank -%}
+    <p class="headline">{{ headline }}</p>
+{%- endif -%}
+
+{%- if cover_media != blank -%}
+    {%- include "./partials/media/media", media: cover_media, class: "page-width cover-image" -%}
+{%- endif -%}
+
+{{ content }}
+
+{%- include "./partials/blocks", blocks: blocks -%}
+{%- include "./partials/post-navigation", collection: "people" -%}
+{%- include "./partials/foot" -%}

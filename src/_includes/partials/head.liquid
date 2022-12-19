@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      {%- if page.url == "/" -%}
+        {{ settings.site_title }}
+      {%- else -%}
+        {{ title | default: name | append: " " }}{% if settings.site_title -%} — {{ settings.site_title }}{% endif %}
+      {%- endif -%}
+    </title>
+
+    {% if description %}
+      <meta name="description" content="{{ description }}"/>
+    {% endif %}
+
+    <script src="/static/js/main.js" type="module"></script>
+
+    {%- if global.environment == "development" -%}
+      <link rel="stylesheet" href="/static/css/style.css" prefetch>
+    {%- else -%}
+      {%- capture css -%}
+        {% include "./static/css/style.css" %}
+      {%- endcapture -%}
+
+      <style>
+        {{ css | cssmin }}
+      </style>
+    {%- endif -%}
+    <link rel="stylesheet" href="/static/css/fonts.css" prefetch>
+  </head>
+  <body class="{{ layout | prepend: "template-" }}">    
+    {% include "./partials/header" %}
+
+    <main>
+        {%- if page.url == "/" -%}
+            <a href="#main-content" class="preloader" aria-title="Enter the {{ settings.site_title }} website">
+                {%- 
+                    include "./partials/media/media", 
+                        media: settings.logo, 
+                        alt: "Winterstellar Studios logo"
+                -%}
+                <span aria-hidden="true">{{ settings.preloader_text }}</span>
+            </a>
+        {%- endif -%}
+
+        {%- if title != blank or data.title != blank -%}
+            <h1 class="visually-hidden">{{ title | default: data.title }}</h1>
+        {%- endif -%}

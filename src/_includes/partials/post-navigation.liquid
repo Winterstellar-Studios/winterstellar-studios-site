@@ -1,0 +1,26 @@
+{% assign previousPost = collections[collection] | getPreviousCollectionItem: page %}
+{% assign nextPost = collections[collection] | getNextCollectionItem: page %}
+
+{%- if previousPost != blank or nextPost != blank -%}
+    <nav class="post-navigation page-width">
+        {%- if previousPost != blank -%}
+            <span class="visually-hidden">Previous {{ collection }} page: </span>
+            <a class="previous-post" href="{{ previousPost.url }}">
+                <svg class="caret-left-icon--small" viewBox="0 0 9 16">
+                    <polyline fill="none" stroke-miterlimit="10" points="7.3,14.7 2.5,8 7.3,1.2" style="--darkreader-inline-fill: none;" data-darkreader-inline-fill=""></polyline>
+                </svg>
+                <span>{{ previousPost.data.title | default: previousPost.data.name }}</span>
+            </a>
+        {%- endif -%}
+
+        {%- if nextPost -%}
+            <span class="visually-hidden">Next {{ collection }} page: </span>
+            <a class="next-post" href="{{ nextPost.url }}">
+                <span>{{ nextPost.data.title | default: nextPost.data.name }}</span>
+                <svg class="caret-right-icon--small" viewBox="0 0 9 16">
+                    <polyline fill="none" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"></polyline>
+                </svg>
+            </a>
+        {% endif %}
+    </nav>
+{%- endif -%}

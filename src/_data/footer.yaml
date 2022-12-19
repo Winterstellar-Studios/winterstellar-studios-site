@@ -1,0 +1,11 @@
+social_links:
+  - url:
+      - type: external
+        url: https://www.instagram.com/winterstellarstudios
+    link_text: Visit us on Instagram
+    icon: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1671346955/Logos/new-Instagram-logo-white-glyph_wmpdfb.png
+  - url:
+      - type: external
+        url: https://www.twitter.com/winterstellarstudios
+    link_text: Visit us on Twitter
+    icon: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1671346955/Logos/twitter-512_jlb83q.png

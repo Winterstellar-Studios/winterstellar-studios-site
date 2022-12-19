@@ -1,0 +1,110 @@
+{%- if blocks != blank -%}
+    {%- for block in blocks -%}
+        {%- case block.type -%}
+            {%- when "image_grid" -%}
+                {%- if block.collection_based != blank or block.grid.length > 0 -%}
+                    <section 
+                        class="
+                            media-grid 
+                            {% if block.masonry -%}masonry{%- endif %}
+                            {{ block.text_position | prepend: 'text-'  }}
+                            {{ block.width         | append: '-width' }}
+                    ">
+                        {%- if block.collection_based != "false" -%}
+                            {%- for collection_item in collections[block.collection_based] -%}
+                                {%- assign title = collection_item.data.title | default: collection_item.data.name | default: "No title set" -%}
+                                {%- assign link_title = 'Learn more about &quot;' | append: title | append: '&quot;'-%}
+
+                                {%- 
+                                    include "./partials/media/media_grid_item",
+                                        title:      title, 
+                                        media:      collection_item.data.cover_media, 
+                                        link:       collection_item.url, 
+                                        link_title: link_title, 
+                                        poster:     collection_item.data.poster, 
+                                        lightbox:   collection_item.data.lightbox
+                                -%}
+                            {%- endfor -%}
+                        {%- elsif block.grid.length > 0 -%}
+                            {%- for grid_item in block.grid -%}
+                                {%- capture url -%}{%- include "partials/url", url_list: grid_item.url -%}{%- endcapture -%}
+                                {%- 
+                                    include "./partials/media/media_grid_item", 
+                                        title:      grid_item.title, 
+                                        media:      grid_item.media, 
+                                        link:       url, 
+                                        link_title: grid_item.link_title 
+                                        lightbox:   grid_item.lightbox
+                                -%}
+                            {%- endfor -%}
+                        {%- endif -%}
+                    </section>
+                {%- endif -%}
+            {%- when "media_and_text" -%}
+                {%- if block.media != blank or block.text.text != blank -%}
+                    <section class="media-and-text {% if block.order != blank %}{{- block.order -}}-first{% endif %} page-width">
+                        {%- if block.media != blank -%}
+                            <div style="flex-basis: {%- if block.media.width != blank -%}{{ block.media.width | append: '%' }}{%- endif -%}">
+                                {%- include "./partials/media/media", 
+                                        media: block.media.media, 
+                                        alt: block.media.alt_text 
+                                -%}
+                            </div>
+                        {%- endif -%}
+
+                        {%- if block.text.text != blank -%}
+                            <div style="text-align: {{ block.text.align }}; flex-basis: {%- if block.media.width != blank -%}{{ 100 | minus: block.media.width | append: '%' }}{% endif %}">
+                                {%- renderTemplate "liquid,md", block -%}
+                                    {{- text.text -}}
+                                {% endrenderTemplate %}
+                            </div>
+                        {%- endif -%}
+                    </section>
+                {%- endif -%}
+            {%- when "full_width_media" -%}
+                {%- if block.media != blank -%}
+                    <section class="full-width-media {{ block.width }}">
+                        {%- case block.media.type -%}
+                            {%- when "image_video" -%}
+                                {%- include "./partials/media/media", media: block.media.media, alt: block.alt_text -%}        
+                            {%- when "vimeo" -%}
+                                {%- if block.media.external != blank -%}
+                                    {%- vimeo, block.media.external, block.media.alt_text -%}
+                                {%- endif -%}
+                            {%- when "youtube" -%}
+                                {%- if block.media.external != blank -%}
+                                    {%- youtube, block.media.external, block.media.alt_text -%}
+                                {%- endif -%}
+                        {%- endcase -%}
+                    </section>
+                {%- endif -%}
+            {%- when "rich_text" -%}
+                {%- if block.rich_text != blank -%}
+                    <section class="rich-text page-width" style="text-align: {{ block.align }};">
+                        {%- renderTemplate "liquid,md", block -%}
+                            {{- rich_text -}}
+                        {% endrenderTemplate %}
+                    </section>
+                {%- endif -%}
+            {%- when "accordions" -%}
+                {%- if block.accordions != blank -%}
+                    <section class="accordions page-width">
+                        {%- if block.title != blank -%}
+                            <h2>{{ block.title }}</h2>
+                        {%- endif -%}
+
+                        {%- for accordion in block.accordions -%}
+                            {%- if accordion.summary != blank -%}
+                                <details>
+                                    <summary>{{ accordion.summary }}</summary>
+                                    {%- if accordion.text != blank -%}
+                                        <p>{{ accordion.text }}</p>    
+                                    {%- endif -%}
+                                </details>
+                            {%- endif -%}
+                        {%- endfor -%}
+                    </section>
+                {%- endif -%}
+        {%- endcase -%}
+    {%- endfor -%}
+{%- endif -%}

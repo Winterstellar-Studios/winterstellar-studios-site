@@ -1,0 +1,371 @@
+@import "lightgallery.css";
+
+:root {
+    --grey: #1a1a1a;
+    --yellow: #d7b541;
+    --white: #fdfdfd;
+}
+
+body {
+    font-family: alegreyasans, sans-serif;
+    background: var(--grey);
+    color: var(--white);
+    margin: 0;
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+}
+
+a {
+    color: var(--white);
+}
+
+h1, h2, h3, 
+.grid-item, 
+.post-navigation,
+.h1,
+.headline,
+summary {
+    font-family: oswald;
+    text-transform: uppercase;
+}
+
+header nav ul,
+footer nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    padding: 0;
+    margin: 0;
+    padding: 1.5rem;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+header {
+    background-color: var(--yellow);
+}
+
+#headerLogo {
+    display: block;
+    width: max-content;
+    margin: auto;
+    padding: 1rem 1rem 0 1rem;
+}
+
+#headerLogo img {
+    margin: auto;
+    display: block;
+    max-width: 110px;
+}
+
+.page-width {
+    max-width: 1047px;
+    margin: auto;
+}
+
+.full-width {
+    max-width: 1400px;
+    margin: auto;
+}
+
+.preloader {
+    display: none;
+}
+
+main {
+    padding: 0 1rem 1rem 1rem;
+}
+
+footer {
+    padding: 1rem;
+}
+
+footer img {
+    max-width: 1.5rem;
+}
+
+section {
+    padding: 2rem;
+}
+
+section.media-grid {
+    display: grid;
+    place-content: center;
+    gap: 1rem;
+}
+
+section.media-grid.full-width {
+    grid-template-columns: repeat(auto-fit, minmax(250px, calc((1400px / 3) - 1rem)));
+    max-width: 1400px;
+}
+
+section.media-grid.page-width {
+    grid-template-columns: repeat(auto-fit, minmax(250px, calc((1500px / 3) - 1rem)));
+}
+
+.text-overlaid .grid-item {
+    display: grid;
+    transition: all .2s ease-in-out;
+    text-decoration: none;
+    font-size: clamp(1rem, 2vw, 2.2rem);
+}
+
+.text-overlaid .grid-item:hover, 
+.text-overlaid .grid-item:focus {
+    scale: 1.1;
+    transition: all .2s ease-in-out;
+    z-index: 2;
+}
+
+.text-overlaid .grid-item:hover span, 
+.text-overlaid .grid-item:focus span {
+    opacity: 1;
+}
+
+.text-overlaid .grid-item span {
+    z-index: 2;
+    grid-area: 1 / 1 / 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    background:rgba(35, 35, 35, .5);
+}
+
+.grid-item video, 
+.grid-item img {
+    grid-area: 1 / 1 / 1 / 1;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 1.5rem;
+    aspect-ratio: 16 / 9;
+}
+
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0); 
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap; 
+  width: 1px;
+}
+
+.current {
+    text-decoration: none;
+    border-bottom: 2px var(--white) solid;
+}
+
+.full-width-media video {
+    width: 100%;
+}
+
+.post-navigation {
+    font-size: 1.5rem;
+}
+
+.post-navigation a {
+    white-space: nowrap;
+}
+
+.post-navigation svg {
+    max-width: .75rem;
+}
+
+.post-navigation polyline {
+    stroke: var(--white);
+}
+
+.post-navigation span {
+    padding-bottom: .22rem;
+}
+
+main section:first-of-type:not(.media-grid):not(.rich-text) {
+    padding-top: 0;
+}
+
+section.media-and-text {
+    display: flex;
+    gap: 2rem;
+    place-items: center;
+}
+
+section.media-and-text video {
+    width: 100%;
+}
+
+section.media-and-text.text-first {
+    flex-direction: row-reverse;
+}
+
+@media (max-width: 600px) {
+    .full-width-media,
+    main {
+        padding: 0;
+    }
+}
+
+@media (max-width: 800px) {
+    /* section.media-grid {
+        grid-template-columns: 1fr;
+    } */
+
+    section.media-and-text.text-first {
+        flex-direction: column-reverse;
+    }
+
+    section.media-and-text {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 1200px) {
+    section.media-grid,
+    section.media-grid.full-width,
+    section.media-grid.page-width {
+        max-width: none;
+    }
+
+    section.media-and-text.text-first {
+        flex-direction: column-reverse;
+    }
+
+    section.media-and-text {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 400px) {
+    .post-navigation a {
+        display: block;
+        float: unset;
+        padding: unset;
+    }
+}
+
+/* section.masonry {
+    display: unset;
+    position: relative;
+}
+
+section.masonry > * {
+    position: absolute;
+}
+
+.masonry img, 
+.masonry video {
+    aspect-ratio: unset;
+} */
+
+.not-found {
+    text-align: center;
+}
+
+.not-found .h1 {
+    font-size: 2rem;
+}
+
+.template-person {
+    text-align: center;
+}
+
+.template-person .headline {
+    font-size: 2rem;
+    padding: 0 1rem;
+}
+
+.accordions {
+    text-align: left;
+}
+
+.accordions h2 {
+    margin-top: 0;
+}
+
+.accordions details {
+    padding: 1rem 0;
+    border-top: 1px var(--white) solid;
+}
+
+.accordions details:last-of-type {
+    border-bottom: 1px var(--white) solid;
+}
+
+.accordions summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.accordions summary::-webkit-details-marker {
+    display: none;
+}
+
+.chevron::before {
+	border-style: solid;
+	border-width: 0.25em 0.25em 0 0;
+	content: '';
+	display: inline-block;
+	height: 0.45em;
+	left: 0.15em;
+	position: relative;
+	top: 0.15em;
+	transform: rotate(-45deg);
+	vertical-align: top;
+	width: 0.45em;
+}
+
+.accordions summary:before {
+    border-style: solid;
+	border-width: 0.25em 0.25em 0 0;
+	content: '';
+	display: inline-block;
+	height: 0.45em;
+	left: 0.15em;
+	position: relative;
+    top: 0;
+	transform: rotate(135deg);
+	vertical-align: top;
+	width: 0.45em;
+}
+
+.accordions  details[open] summary:before {
+    border-style: solid;
+	border-width: 0.25em 0.25em 0 0;
+	content: '';
+	display: inline-block;
+	height: 0.45em;
+	left: 0.15em;
+	position: relative;
+	top: 0.15em;
+	transform: rotate(-45deg);
+	vertical-align: top;
+	width: 0.45em;
+}
+
+.next-post {
+    float: right;
+    padding-right: 2.5rem;
+}
+
+.cover-image {
+    width: 100%;
+}
+
+.previous-post {
+    float: left;
+}

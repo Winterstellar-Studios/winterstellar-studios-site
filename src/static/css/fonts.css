@@ -1,0 +1,46 @@
+/* Alegreya Sans 
+Regular */
+@font-face {
+    font-family: alegreyasans;
+    src: url("../fonts/alegreya/AlegreyaSansSC-Regular.woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Regular italic */
+@font-face {
+    font-family: alegreyasans;
+    src: url("../fonts/alegreya/AlegreyaSansSC-Italic.woff2");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* Bold */
+@font-face {
+    font-family: alegreyasans;
+    src: url("../fonts/alegreya/AlegreyaSansSC-Bold.woff2");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Bold italic */
+@font-face {
+    font-family: alegreyasans;
+    src: url("../fonts/alegreya/AlegreyaSansSC-BoldItalic.woff2");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* Oswald 
+Medium */
+@font-face {
+    font-family: oswald;
+    src: url("../fonts/oswald/Oswald-Medium.ttf");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
