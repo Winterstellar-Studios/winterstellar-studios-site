@@ -6,11 +6,16 @@ backend:
   base_url: https://winterstellarstudios.com
 media_folder: "src/static/img"
 public_folder: "/static/img"
+publish_mode: editorial_workflow
 media_library:
   name: cloudinary
+  output_filename_only: false
   config:
-    cloud_name: aidanjones
-    api_key: 447781644958767
+    cloud_name: dsa4cnuey
+    api_key: 132616628377262
+    default_transformations:
+      - - fetch_format: auto
+          quality: auto
 # Please run "npx netlify-cms-proxy-server" for local backend
 local_backend: true
 # publish_mode: editorial_workflow
@@ -18,6 +23,7 @@ collections:
   - label: "Work"
     name: "work"
     folder: "src/work"
+    preview_path: "work"
     create: true
     editor:
       preview: true
@@ -25,6 +31,14 @@ collections:
       - label: "ID"
         name: "id"
         widget: "uuid"
+      - label: "tags"
+        name: "tags"
+        widget: "hidden"
+        default: "work"
+      - label: "layout"
+        name: "layout"
+        widget: "hidden"
+        default: "work"
       - widget: "string"
         label: "Title"
         name: "title"
@@ -33,6 +47,10 @@ collections:
         name: "description"
         hint: "Displayed in search engine results"
         pattern: ['^.{0,120}$', "Maximum 120 characters"]
+      - widget: "image"
+        label: "Cover media"
+        name: "cover_media"
+        hint: "Used when displaying collection items in an media grid."
       - widget: "list"
         label: "Blocks"
         name: "blocks"
@@ -44,18 +62,71 @@ collections:
             widget: 'object'
             required: false
             fields:
+              - widget: "select"
+                name: "collection_based"
+                label: "Collection-based image grid"
+                options:
+                  - label: "N/A (Manual)"
+                    value: "false"
+                  - label: "People"
+                    value: "people"
+                  - label: "Work"
+                    value: "work"
+                default: false
+                hint: "Choose a collection from this list to automatically display grid items based off the items in the collection."
+              - widget: "select"
+                label: "Container width"
+                name: "width"
+                options:
+                  - label: "Page width"
+                    value: "page"
+                  - label: "Full width"
+                    value: "full"
+              - widget: select
+                label: "Text position"
+                name: "text_position"
+                hint: "Choose where to display grid item titles: either as an overlay when hovering over the media, or as text below each piece of media."
+                options:
+                  - label: "Overlaid"
+                    value: "overlaid"
+                  - label: "Below image"
+                    value: "below"
+              - widget: boolean
+                label: "Display in Masonry style?"
+                name: masonry
+                hint: "Displays the grid in tiles of various heights."
+                default: false
               - widget: "list"
-                label: "Grid"
+                label: "Manual grid items"
                 name: "grid"
                 allow_add: true
                 summary: "Grid item"
                 label_singular: "grid item"
                 required: false
                 fields:
-                  - label: "Image"
-                    name: "image"
+                  - label: "Title"
+                    name: "title"
+                    widget: "string"
+                    hint: "Text that appears over image on hover."
+                  - label: "Link title"
+                    name: "link_title"
+                    widget: "string"
+                    hint: "Describe where this grid item links to for screen readers."
+                    required: false
+                  - label: "Media"
+                    name: "media"
                     widget: "image"
                     choose_url: true
+                  - label: "Poster image"
+                    name: "poster"
+                    widget: "image"
+                    required: false
+                    hint: "Used when video fails to load or when user has certain preferences."
+                  - label: "Enable lightbox?"
+                    hint: "Displays this image in a lightbox on click. This setting will override any URL that you may attribute to this grid item."
+                    widget: "boolean"
+                    name: lightbox
+                    default: false
                   - label: 'URL'
                     name: 'url'
                     widget: 'list'
@@ -74,6 +145,7 @@ collections:
                           collection: "work"
                           search_fields: ["title"]
                           value_field: "id"
+                          display_fields: ["title"]
                       - label: "People"
                         name: people
                         widget: object
@@ -97,6 +169,7 @@ collections:
                           collection: "pages"
                           search_fields: ["title"]
                           value_field: "id"
+                          display_fields: ["title"]
                       - label: "External"
                         name: external
                         widget: object
@@ -122,34 +195,28 @@ collections:
                     value: "media"
                   - label: "Text"
                     value: "text"
-              - widget: "object"
-                label: "Media"
+              - label: "Media"
                 name: "media"
+                widget: "object"
                 required: false
                 fields:
-                - label: "Media"
-                  name: "media"
-                  widget: image
-                  required: false
-                - label: "Width"
-                  name: "width"
-                  widget: "object"
-                  required: false
-                  fields:
-                    - label: "Display at original width?"
-                      name: "original_width"
-                      widget: "boolean"
-                      required: false
-                    - label: "Width"
-                      info: "Number is in the percentage of the container that the media's width will occupy"
-                      name: "width"
-                      widget: "number"
-                      value_type: "int"
-                      min: 1
-                      max: 100
-                      step: 1
-                      default: 50
-                      required: false
+                  - label: "Media"
+                    name: "media"
+                    widget: image
+                    required: false
+                  - label: "Alt text"
+                    name: "alt_text"
+                    widget: string
+                  - label: "Width"
+                    hint: "Number is in the percentage of the container that the media's width will occupy"
+                    name: "width"
+                    widget: "number"
+                    value_type: "int"
+                    min: 1
+                    max: 100
+                    step: 1
+                    default: 50
+                    required: false
               - label: "Text"
                 name: "text"
                 widget: "object"
@@ -159,8 +226,289 @@ collections:
                     name: "text"
                     widget: "markdown"
                     required: false
+                  - label: "Text alignment"
+                    name: "align"
+                    widget: "select"
+                    required: false
+                    options:
+                      - label: "Left"
+                        value: "left"
+                      - label: "Center"
+                        value: "center"
+                      - label: "Right"
+                        value: "right"
+          - label: "Full-width media"
+            name: "full_width_media"
+            widget: "object"
+            fields:
+              - label: "Media"
+                name: "media"
+                widget: "object"
+                fields:
+                - label: "Type"
+                  name: "type"
+                  widget: select
+                  options:
+                    - label: "Image/Video"
+                      value: "image_video"
+                    - label: "Vimeo"
+                      value: "vimeo"
+                    - label: "YouTube"
+                      value: "youtube"
+                - label: "Media"
+                  name: "media"
+                  widget: "image"
+                  required: false
+                - label: "External video link"
+                  name: "external"
+                  widget: "string"
+                  hint: "Must be a link to either a Vimeo or YouTube video."
+                  default: "https://www.youtube.com/watch?v=EaLXplZW_pQ"
+                  pattern: 
+                    - '^(http:\/\/|https:\/\/)(vimeo\.com|youtu\.be|www\.youtube\.com)\/([\w\/]+)([\?].*)?$'
+                    - "Text must be a valid URL."
+                - label: "Alt text"
+                  name: "alt_text"
+                  widget: "string"
+              - label: "Width"
+                name: "width"
+                widget: "select"
+                hint: "Full-width spans the width of the entire browser. Page-width just the width of the text container."
+                options:
+                  - label: "Full-width"
+                    value: "full-width"
+                  - label: "Page-width"
+                    value: "page-width"
+          - label: "Rich text"
+            name: "rich_text"
+            widget: "object"
+            fields: 
+              - label: "Rich text"
+                name: "rich_text"
+                widget: "markdown"
+              - label: "Text Content"
+                name: "align"
+                widget: "select"
+                required: false
+                options:
+                  - label: "Left"
+                    value: "left"
+                  - label: "Center"
+                    value: "center"
+                  - label: "Right"
+                    value: "right"
+          - label: "Accordions"
+            name: "accordions"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Title"
+                name: "title"
+                widget: "string"
+                default: "Studio credits"
+                hint: "Title of the accordions section that displays above the accordions"
+              - label: "Accordions"
+                name: "accordions"
+                widget: "list"
+                label_singular: "accordion"
+                fields:
+                  - label: "Preview text"
+                    name: "summary"
+                    widget: "string"
+                  - label: "Text content"
+                    name: "text"
+  - label: "People"
+    label_singular: "person"
+    identifier_field: name
+    slug: "{{name}}"
+    name: "people"
+    folder: "src/about"
+    preview_path: about/{{ slug }}
+    create: true
+    editor:
+      preview: true
+    fields:
+      - label: "ID"
+        name: "id"
+        widget: "uuid"
+      - label: "tags"
+        name: "tags"
+        widget: "hidden"
+        default: "people"
+      - label: "layout"
+        name: "layout"
+        widget: "hidden"
+        default: "person"
+      - label: "Name"
+        name: "name"
+        widget: "string"
+      - label: "Cover media"
+        name: "cover_media"
+        widget: "image"
+        required: false
+        hint: "Displays in image grids when collection is used as a source."
+      - label: "Headline"
+        name: "headline"
+        widget: "string"
+        hint: "Quirky one-liner that displays at the top of the page"
+        required: false
+      - widget: "list"
+        label: "Blocks"
+        name: "blocks"
+        required: false
+        allow_add: true
+        types:
+          - label: "Image grid"
+            name: "image_grid"
+            widget: 'object'
+            required: false
+            fields:
+              - widget: "select"
+                name: "collection_based"
+                label: "Collection-based image grid"
+                options:
+                  - label: "N/A (Manual)"
+                    value: "false"
+                  - label: "People"
+                    value: "people"
+                  - label: "Work"
+                    value: "work"
+                default: false
+                hint: "Choose a collection from this list to automatically display grid items based off the items in the collection."
+              - widget: "select"
+                label: "Container width"
+                name: "width"
+                options:
+                  - label: "Page width"
+                    value: "page"
+                  - label: "Full width"
+                    value: "full"
+              - widget: select
+                label: "Text position"
+                name: "text_position"
+                hint: "Choose where to display grid item titles: either as an overlay when hovering over the media, or as text below each piece of media."
+                options:
+                  - label: "Overlaid"
+                    value: "overlaid"
+                  - label: "Below image"
+                    value: "below"
+              - widget: boolean
+                label: "Display in Masonry style?"
+                name: masonry
+                hint: "Displays the grid in tiles of various heights."
+                default: false
+              - widget: "list"
+                label: "Manual grid items"
+                name: "grid"
+                allow_add: true
+                summary: "Grid item"
+                label_singular: "grid item"
+                required: false
+                fields:
+                  - label: "Title"
+                    name: "title"
+                    widget: "string"
+                    hint: "Text that appears over image on hover."
+                  - label: "Link title"
+                    name: "link_title"
+                    widget: "string"
+                    hint: "Describe where this grid item links to for screen readers."
+                  - label: "Media"
+                    name: "media"
+                    widget: "image"
+                    choose_url: true
+                  - label: "Poster image"
+                    name: "poster"
+                    widget: "image"
+                    required: false
+                    hint: "Used when video fails to load or when user has certain preferences."
+                  - label: "Enable lightbox?"
+                    hint: "Displays this image in a lightbox on click. This setting will override any URL that you may attribute to this grid item."
+                    widget: "boolean"
+                    name: lightbox
+                    default: false
+                  - label: 'URL'
+                    name: 'url'
+                    widget: 'list'
+                    hint: "If the link you desire is a page on this site, choose one of the available collections and then one of the pages from the collection."
+                    required: false
+                    types:
+                      - label: "Work"
+                        name: work
+                        widget: object
+                        required: false
+                        fields:
+                        - label: 'Page'
+                          name: 'page'
+                          required: false
+                          widget: relation
+                          collection: "work"
+                          search_fields: ["title"]
+                          value_field: "id"
+                          display_fields: ["title"]
+                      - label: "People"
+                        name: people
+                        widget: object
+                        required: false
+                        fields:
+                        - label: 'Page'
+                          name: 'page'
+                          widget: relation
+                          collection: "people"
+                          search_fields: ["name"]
+                          value_field: "id"
+                          display_fields: ["name"]
+                      - label: "Pages"
+                        name: pages
+                        widget: object
+                        required: false
+                        fields:
+                        - label: "Page"
+                          name: "page"
+                          widget: "relation"
+                          collection: "pages"
+                          search_fields: ["title"]
+                          value_field: "id"
+                          display_fields: ["title"]
+                      - label: "External"
+                        name: external
+                        widget: object
+                        required: false
+                        fields:
+                        - label: "URL"
+                          name: url
+                          widget: "string"
+                          default: "https://www.example.com"
+                          pattern: 
+                            - '^(https?:\/\/|\/)\w+\.[^\s]+$|^\/[^\s]*$'
+                            - "Text must be a valid URL."
+          - widget: "object"
+            label: "Media and text"
+            name: "media_and_text"
+            required: false
+            fields:
+              - label: "Display which first?"
+                name: "order"
+                widget: "select"
+                options:
+                  - label: "Media"
+                    value: "media"
+                  - label: "Text"
+                    value: "text"
+              - label: "Media"
+                name: "media"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Media"
+                    name: "media"
+                    widget: image
+                    required: false
+                  - label: "Alt text"
+                    name: "alt_text"
+                    widget: string
                   - label: "Width"
-                    info: "Number is in the percentage of the container that the image's width will occupy"
+                    hint: "Number is in the percentage of the container that the media's width will occupy"
                     name: "width"
                     widget: "number"
                     value_type: "int"
@@ -168,6 +516,15 @@ collections:
                     max: 100
                     step: 1
                     default: 50
+                    required: false
+              - label: "Text"
+                name: "text"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Text"
+                    name: "text"
+                    widget: "markdown"
                     required: false
                   - label: "Text Content"
                     name: "align"
@@ -183,88 +540,395 @@ collections:
           - label: "Full-width media"
             name: "full_width_media"
             widget: "object"
-            fields: 
+            fields:
               - label: "Media"
                 name: "media"
-                widget: "image"
-  - label: "People"
-    label_singular: "person"
-    identifier_field: name
-    slug: "{{name}}"
-    name: "people"
-    folder: "src/about"
-    create: true
-    editor:
-      preview: true
-    fields:
-      - label: "ID"
-        name: "id"
-        widget: "uuid"
-      - label: "Name"
-        name: "name"
-        widget: "string"
-      - label: "Image"
-        name: "image"
-        widget: "image"
-        required: false
-      - lable: "Biography"
-        name: "bio"
-        widget: "markdown"
-        required: false
-      - label: "Headline"
-        name: "headline"
-        widget: "string"
-        hint: "Quirky one-liner that displays at the top of the page"
-        required: false
-      - label: "Accordions"
-        name: "accordions"
-        widget: "object"
-        required: false
-        fields:
-          - label: "Title"
-            name: "title"
-            widget: "string"
-            default: "Studio credits"
-            hint: "Title of the accordions section that displays above the accordions"
+                widget: "object"
+                fields:
+                - label: "Type"
+                  name: "type"
+                  widget: select
+                  options:
+                    - label: "Image/Video"
+                      value: "image_video"
+                    - label: "Vimeo"
+                      value: "vimeo"
+                    - label: "YouTube"
+                      value: "youtube"
+                - label: "Media"
+                  name: "media"
+                  widget: "image"
+                  required: false
+                - label: "External video link"
+                  name: "external"
+                  widget: "string"
+                  hint: "Must be a link to either a Vimeo or YouTube video."
+                  default: "https://www.youtube.com/watch?v=EaLXplZW_pQ"
+                  pattern: 
+                    - '^(http:\/\/|https:\/\/)(vimeo\.com|youtu\.be|www\.youtube\.com)\/([\w\/]+)([\?].*)?$'
+                    - "Text must be a valid URL."
+                - label: "Alt text"
+                  name: "alt_text"
+                  widget: "string"
+              - label: "Width"
+                name: "width"
+                widget: "select"
+                hint: "Full-width spans the width of the entire browser. Page-width just the width of the text container."
+                options:
+                  - label: "Full-width"
+                    value: "full-width"
+                  - label: "Page-width"
+                    value: "page-width"
+          - label: "Rich text"
+            name: "rich_text"
+            widget: "object"
+            fields: 
+              - label: "Rich text"
+                name: "rich_text"
+                widget: "markdown"
+              - label: "Text align"
+                name: "align"
+                widget: "select"
+                required: false
+                options:
+                  - label: "Left"
+                    value: "left"
+                  - label: "Center"
+                    value: "center"
+                  - label: "Right"
+                    value: "right"
           - label: "Accordions"
             name: "accordions"
-            widget: "list"
+            widget: "object"
+            required: false
             fields:
-              - label: "Preview text"
-                name: "summary"
+              - label: "Title"
+                name: "title"
                 widget: "string"
-              - label: "Text content"
-                name: "text"
+                default: "Studio credits"
+                hint: "Title of the accordions section that displays above the accordions"
+              - label: "Accordions"
+                name: "accordions"
+                widget: "list"
+                label_singular: "accordion"
+                fields:
+                  - label: "Preview text"
+                    name: "summary"
+                    widget: "string"
+                  - label: "Text content"
+                    name: "text"
   - label: "Pages"
     label_singular: "page"
     name: "pages"
     folder: "src/pages"
     create: true
+    preview_path: "{%- unless home -%}{{ slug | default: title | slugify }}{%- endunless -%}/"
     editor:
       preview: true
     fields:
       - label: "ID"
         name: "id"
         widget: "uuid"
+      - label: "tags"
+        name: "tags"
+        widget: "hidden"
+        default: "pages"
+      - label: "layout"
+        name: "layout"
+        widget: "hidden"
+        default: "default"
+      - label: "date"
+        name: "date"
+        widget: "hidden"
+        default: "Last Modified"
+      - label: "tags"
+        name: "permalink"
+        widget: "hidden"
+        default: "{%- unless home -%}{{ slug | default: title | slugify }}{%- endunless -%}/"
       - label: "Title"
         name: "title"
         widget: "string"
-      - label: "Description"
-        name: "description" 
-        widget: "markdown"
-        hint: "Displays at the top of the page"
-      - label: "Collection image grid"
-        name: "collection"
-        widget: "select"
+      - label: "Make home page?"
+        name: "home"
+        widget: "boolean"
         required: false
-        options:
-          - label: "People"
-            value: "people"
-          - label: "Work"
-            value: "work"
-          - label: "Pages"
-            value: "pages"
-        hint: "Choose the collection whose entries you want to display as an image grid."
+        hint: "WARNING: Make sure one page and only one page has this value checked. In other words, your site always needs exactly one home page!"
+      - label: "Slug"
+        name: "slug"
+        widget: "string"
+        required: false
+        hint: "Piece of text that will identify this page that appears after the domain. For example, the \"slug\" in \"example.com/slug\" is the slug and what users would visit to view this page. If left blank, the slug will be a transformed version of the page title."
+      - label: "Description"
+        name: "description"
+        widget: "text"
+        hint: "Displayed in search engine results"
+        pattern: ['^.{0,120}$', "Maximum 120 characters"]
+      - widget: "list"
+        label: "Blocks"
+        name: "blocks"
+        required: false
+        allow_add: true
+        types:
+          - label: "Image grid"
+            name: "image_grid"
+            widget: 'object'
+            required: false
+            fields:
+              - widget: "select"
+                name: "collection_based"
+                label: "Collection-based image grid"
+                options:
+                  - label: "N/A (Manual)"
+                    value: "false"
+                  - label: "People"
+                    value: "people"
+                  - label: "Work"
+                    value: "work"
+                default: false
+                hint: "Choose a collection from this list to automatically display grid items based off the items in the collection."
+              - widget: "select"
+                label: "Container width"
+                name: "width"
+                options:
+                  - label: "Page width"
+                    value: "page"
+                  - label: "Full width"
+                    value: "full"
+              - widget: select
+                label: "Text position"
+                name: "text_position"
+                hint: "Choose where to display grid item titles: either as an overlay when hovering over the media, or as text below each piece of media."
+                options:
+                  - label: "Overlaid"
+                    value: "overlaid"
+                  - label: "Below image"
+                    value: "below"
+              - widget: boolean
+                label: "Display in Masonry style?"
+                name: masonry
+                hint: "Displays the grid in tiles of various heights."
+                required: false
+                default: false
+              - widget: "list"
+                label: "Manual grid items"
+                name: "grid"
+                allow_add: true
+                summary: "Grid item"
+                label_singular: "grid item"
+                required: false
+                fields:
+                  - label: "Title"
+                    name: "title"
+                    widget: "string"
+                    hint: "Text that appears over image on hover."
+                  - label: "Link title"
+                    name: "link_title"
+                    widget: "string"
+                    hint: "Describe where this grid item links to for screen readers."
+                  - label: "Media"
+                    name: "media"
+                    widget: "image"
+                    choose_url: true
+                  - label: "Poster image"
+                    name: "poster"
+                    widget: "image"
+                    required: false
+                    hint: "Used when video fails to load or when user has certain preferences."
+                  - label: "Enable lightbox?"
+                    hint: "Displays this image in a lightbox on click. This setting will override any URL that you may attribute to this grid item."
+                    widget: "boolean"
+                    name: lightbox
+                    default: false
+                  - label: 'URL'
+                    name: 'url'
+                    widget: 'list'
+                    hint: "If the link you desire is a page on this site, choose one of the available collections and then one of the pages from the collection."
+                    required: false
+                    types:
+                      - label: "Work"
+                        name: work
+                        widget: object
+                        required: false
+                        fields:
+                        - label: 'Page'
+                          name: 'page'
+                          required: false
+                          widget: relation
+                          collection: "work"
+                          search_fields: ["title"]
+                          value_field: "id"
+                          display_fields: ["title"]
+                      - label: "People"
+                        name: people
+                        widget: object
+                        required: false
+                        fields:
+                        - label: 'Page'
+                          name: 'page'
+                          widget: relation
+                          collection: "people"
+                          search_fields: ["name"]
+                          value_field: "id"
+                          display_fields: ["name"]
+                      - label: "Pages"
+                        name: pages
+                        widget: object
+                        required: false
+                        fields:
+                        - label: "Page"
+                          name: "page"
+                          widget: "relation"
+                          collection: "pages"
+                          search_fields: ["title"]
+                          value_field: "id"
+                          display_fields: ["title"]
+                      - label: "External"
+                        name: external
+                        widget: object
+                        required: false
+                        fields:
+                        - label: "URL"
+                          name: url
+                          widget: "string"
+                          default: "https://www.example.com"
+                          pattern: 
+                            - '^(https?:\/\/|\/)\w+\.[^\s]+$|^\/[^\s]*$'
+                            - "Text must be a valid URL."
+          - widget: "object"
+            label: "Media and text"
+            name: "media_and_text"
+            required: false
+            fields:
+              - label: "Display which first?"
+                name: "order"
+                widget: "select"
+                options:
+                  - label: "Media"
+                    value: "media"
+                  - label: "Text"
+                    value: "text"
+              - label: "Media"
+                name: "media"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Media"
+                    name: "media"
+                    widget: image
+                    required: false
+                  - label: "Alt text"
+                    name: "alt_text"
+                    widget: string
+                  - label: "Width"
+                    hint: "Number is in the percentage of the container that the media's width will occupy"
+                    name: "width"
+                    widget: "number"
+                    value_type: "int"
+                    min: 1
+                    max: 100
+                    step: 1
+                    default: 50
+                    required: false
+              - label: "Text"
+                name: "text"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Text"
+                    name: "text"
+                    widget: "markdown"
+                    required: false
+                  - label: "Text Content"
+                    name: "align"
+                    widget: "select"
+                    required: false
+                    options:
+                      - label: "Left"
+                        value: "left"
+                      - label: "Center"
+                        value: "center"
+                      - label: "Right"
+                        value: "right"
+          - label: "Full-width media"
+            name: "full_width_media"
+            widget: "object"
+            fields:
+              - label: "Media"
+                name: "media"
+                widget: "object"
+                fields:
+                - label: "Type"
+                  name: "type"
+                  widget: select
+                  options:
+                    - label: "Image/Video"
+                      value: "image_video"
+                    - label: "Vimeo"
+                      value: "vimeo"
+                    - label: "YouTube"
+                      value: "youtube"
+                - label: "Media"
+                  name: "media"
+                  widget: "image"
+                  required: false
+                - label: "External video link"
+                  name: "external"
+                  widget: "string"
+                  hint: "Must be a link to either a Vimeo or YouTube video."
+                  default: "https://www.youtube.com/watch?v=EaLXplZW_pQ"
+                  pattern: 
+                    - '^(http:\/\/|https:\/\/)(vimeo\.com|youtu\.be|www\.youtube\.com)\/([\w\/]+)([\?].*)?$'
+                    - "Text must be a valid URL."
+                - label: "Alt text"
+                  name: "alt_text"
+                  widget: "string"
+              - label: "Width"
+                name: "width"
+                widget: "select"
+                hint: "Full-width spans the width of the entire browser. Page-width just the width of the text container."
+                options:
+                  - label: "Full-width"
+                    value: "full-width"
+                  - label: "Page-width"
+                    value: "page-width"
+          - label: "Rich text"
+            name: "rich_text"
+            widget: "object"
+            fields: 
+              - label: "Rich text"
+                name: "rich_text"
+                widget: "markdown"
+              - label: "Text align"
+                name: "align"
+                widget: "select"
+                required: false
+                options:
+                  - label: "Left"
+                    value: "left"
+                  - label: "Center"
+                    value: "center"
+                  - label: "Right"
+                    value: "right"
+          - label: "Accordions"
+            name: "accordions"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Title"
+                name: "title"
+                widget: "string"
+                default: "Studio credits"
+                hint: "Title of the accordions section that displays above the accordions"
+              - label: "Accordions"
+                name: "accordions"
+                widget: "list"
+                label_singular: "accordion"
+                fields:
+                  - label: "Preview text"
+                    name: "summary"
+                    widget: "string"
+                  - label: "Text content"
+                    name: "text"
   - label: "Settings"
     name: "settings"
     editor:
@@ -283,38 +947,70 @@ collections:
               - label: Title
                 name: text
                 widget: string
-              - label: URL
-                name: url
-                widget: string
-      - label: "Quick Links"
-        name: "links"
-        file: "src/_data/quicklinks.yaml"
-        fields:
-          - label: Nav Items
-            name: links
-            widget: list
-            collapsed: false
-            fields:
-              - label: Title
-                name: title
-                widget: string
-              - label: URL
-                name: url
-                widget: string
-              - label: Description
-                name: desc
-                widget: string
+              - label: 'URL'
+                name: 'url'
+                widget: 'list'
+                hint: "If the link you desire is a page on this site, choose one of the available collections and then one of the pages from the collection."
+                types:
+                  - label: "Work"
+                    name: work
+                    widget: object
+                    fields:
+                    - label: 'Page'
+                      name: 'page'
+                      widget: relation
+                      collection: "work"
+                      search_fields: ["title"]
+                      value_field: "id"
+                      display_fields: ["title"]
+                  - label: "People"
+                    name: people
+                    widget: object
+                    fields:
+                    - label: 'Page'
+                      name: 'page'
+                      widget: relation
+                      collection: "people"
+                      search_fields: ["name"]
+                      value_field: "id"
+                      display_fields: ["name"]
+                  - label: "Pages"
+                    name: pages
+                    widget: object
+                    fields:
+                    - label: "Page"
+                      name: "page"
+                      widget: "relation"
+                      collection: "pages"
+                      search_fields: ["title"]
+                      display_fields: ["title"]
+                      value_field: "id"
+                  - label: "External"
+                    name: external
+                    widget: object
+                    fields:
+                    - label: "URL"
+                      name: url
+                      widget: "string"
+                      default: "https://www.example.com"
+                      pattern: 
+                        - '^(https?:\/\/|\/)\w+\.[^\s]+$|^\/[^\s]*$'
+                        - "Text must be a valid URL."
       - label: "Global"
         name: "settings"
         file: "src/_data/settings.yaml"
         fields:
-          - label: Site title, 
-            name: site_title, 
+          - label: Site title
+            name: site_title
             widget: string 
           - label: "Site logo"
             name: "logo"
             widget: "image"
             default: "/static/img/winterstellar-logo.png"
+          - label: "Preloader text"
+            name: preloader_text
+            widget: string
+            hint: "Text that appears under the preloader logo."
       - label: "Footer"
         name: "footer"
         file: "src/_data/footer.yaml"
@@ -373,3 +1069,7 @@ collections:
               - label: Icon
                 name: icon
                 widget: image
+              - label: Link text
+                name: link_text
+                widget: string
+                hint: "Used to describe the link for screen reader users."
