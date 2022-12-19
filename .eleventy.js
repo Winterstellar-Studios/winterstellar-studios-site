@@ -1,6 +1,5 @@
 const yaml = require("js-yaml");
 const { DateTime } = require("luxon");
-const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const htmlmin = require("html-minifier");
 const CleanCSS = require("clean-css");
 const fs = require("fs");
@@ -40,8 +39,6 @@ module.exports = function (eleventyConfig) {
     );
   });
 
-  // Syntax Highlighting for Code blocks
-  eleventyConfig.addPlugin(syntaxHighlight);
   eleventyConfig.addFilter("cssmin", function (code) {
     return new CleanCSS({}).minify(code).styles;
   });
