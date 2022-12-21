@@ -6,7 +6,8 @@ date: Last Modified
 permalink: "{%- unless home -%}{{ slug | default: title | slugify }}{%- endunless -%}/"
 title: Work
 home: true
-description: Winterstellar Studios meta description
+slug: Work
+description: Explore the portfolio of work from 3D animation studio Winterstellar Studios
 blocks:
   - type: image_grid
     collection_based: work
