@@ -33,6 +33,12 @@ blocks:
         title: Daycare scene
   - type: media_and_text
     media:
+      width: 50
+      media: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1671623097/Work/Colorville/Colorville_Poster_small2_cajuzr.jpg
+      alt_text: Official Poster
+    order: media
+  - type: media_and_text
+    media:
       width: 40
       media: https://res.cloudinary.com/dsa4cnuey/video/upload/f_auto,q_auto/v1670991016/Work/Colorville/All_Chars_Turntable_0001-0250_ybbpxr.mp4
       alt_text: Duplicated multi-colored models
