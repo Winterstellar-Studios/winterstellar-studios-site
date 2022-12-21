@@ -32,7 +32,7 @@ blocks:
     collection_based: "false"
     masonry: false
     width: page
-    text_position: below
+    text_position: overlaid
     grid:
       - lightbox: true
         title: Main Poster
@@ -44,7 +44,7 @@ blocks:
     collection_based: "false"
     masonry: true
     width: full
-    text_position: below
+    text_position: overlaid
     grid:
       - lightbox: true
         title: Character Model Turnaround
