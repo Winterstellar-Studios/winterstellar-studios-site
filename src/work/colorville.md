@@ -31,12 +31,18 @@ blocks:
       - lightbox: true
         media: https://res.cloudinary.com/dsa4cnuey/video/upload/f_auto,q_auto/v1670990979/Work/Colorville/Daycare_Scene_witsxe.mp4
         title: Daycare scene
-  - type: media_and_text
-    media:
-      width: 50
-      media: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1671623097/Work/Colorville/Colorville_Poster_small2_cajuzr.jpg
-      alt_text: Official Poster
-    order: media
+  - type: image_grid
+    collection_based: "false"
+    masonry: false
+    width: full
+    text_position: overlaid
+    grid:
+      - lightbox: true
+        title: Official Poster
+        media: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1671623097/Work/Colorville/Colorville_Poster_small2_cajuzr.jpg
+      - lightbox: true
+        title: Environment Painting BTS
+        media: https://youtu.be/bUBYMsTZ1uE
   - type: media_and_text
     media:
       width: 40
