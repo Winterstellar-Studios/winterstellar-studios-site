@@ -6,6 +6,13 @@ title: Dear Mrs. President
 description: Animation and production for Dear Mrs. President by Winterstellar Studios
 cover_media: https://res.cloudinary.com/dsa4cnuey/video/upload/f_auto,q_auto/v1671618637/Work/Dear%20Mrs.%20President/Dear_Mrs_President_-_Cover_zheety.mp4
 blocks:
+  - type: full_width_media
+    media:
+      external: https://www.youtube.com/watch?v=EaLXplZW_pQ
+      type: image_video
+      media: https://res.cloudinary.com/dsa4cnuey/video/upload/f_auto,q_auto/v1671620908/Work/Dear%20Mrs.%20President/Dear_Mrs_President_-_Internet2_1_jsou8t.mp4
+      alt_text: '"Dear Mrs. President" by Winterstellar Studios'
+    width: page-width
   - type: rich_text
     rich_text: >-
       An animated short film commissioned by award-winning children’s author Ana
