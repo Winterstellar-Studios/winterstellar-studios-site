@@ -65,7 +65,7 @@ blocks:
       - lightbox: false
         media: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1671616209/Work/Twin%20Suns%20Tournament/TIE_Squad_dp6pxf.png
         title: Fully textured Tie Fighters
-    text_position: below
+    text_position: overlaid
   - type: media_and_text
     media:
       width: 50
