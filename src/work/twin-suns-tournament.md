@@ -23,7 +23,7 @@ blocks:
     collection_based: "false"
     masonry: false
     width: page
-    text_position: below
+    text_position: overlaid
     grid:
       - lightbox: false
         media: https://res.cloudinary.com/dsa4cnuey/image/upload/f_auto,q_auto/v1670990939/Work/Twin%20Suns%20Tournament/Logo_trans_t2pt57.png
@@ -68,7 +68,7 @@ blocks:
     text_position: overlaid
   - type: media_and_text
     media:
-      width: 50
+      width: 100
       media: https://youtu.be/YYIvs1kpoa0
       alt_text: A Behind the Scenes breakdown
     order: media
